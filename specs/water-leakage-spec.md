@@ -1,17 +1,39 @@
 # Smart Water Leakage Detection System
 
-## Goal
+## Overview
 
-Detect and monitor water leakages.
+A Streamlit-based application for monitoring, tracking, and reporting water leakage incidents.
+
+## Problem Statement
+
+Water leakages often go unnoticed, causing water wastage and infrastructure damage. This system helps users report and monitor leak incidents efficiently.
 
 ## Features
 
-- Dashboard
-- Alerts
-- Monitoring
+- Leak reporting
+- Dashboard visualization
+- Incident tracking
+- Data storage
+- Status management
+
+## Functional Requirements
+
+### FR-1
+Users can submit leakage reports.
+
+### FR-2
+Users can view reported incidents.
+
+### FR-3
+Administrators can review reports.
+
+### FR-4
+Dashboard displays statistics and summaries.
 
 ## Acceptance Criteria
 
-- Leak detection works
-- Alerts generated
-- Dashboard updates correctly
+- [ ] Users can create reports
+- [ ] Reports are stored successfully
+- [ ] Dashboard loads correctly
+- [ ] Statistics are displayed
+- [ ] Admin can review reports
