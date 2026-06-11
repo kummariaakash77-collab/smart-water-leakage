@@ -1,6 +1,16 @@
 stages:
+  - format
   - lint
+  - type_check
   - test
+  - coverage
+
+format:
+  stage: format
+  image: python:3.12
+  script:
+    - pip install ruff
+    - ruff format --check .
 
 lint:
   stage: lint
@@ -9,9 +19,30 @@ lint:
     - pip install ruff
     - ruff check .
 
+dependency_audit:
+  stage: lint
+  image: python:3.12
+  script:
+    - pip install pip-audit
+    - pip-audit
+
+type_check:
+  stage: type_check
+  image: python:3.12
+  script:
+    - pip install mypy
+    - mypy .
+
 test:
   stage: test
   image: python:3.12
   script:
     - pip install pytest
     - pytest
+
+coverage:
+  stage: coverage
+  image: python:3.12
+  script:
+    - pip install pytest pytest-cov
+    - pytest --cov=. --cov-report=term
