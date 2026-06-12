@@ -11,88 +11,91 @@ def show_analytics_page(language):
 
     st.title("📊 Analytics Dashboard")
 
+    # ================= DATA =================
     total, pending, resolved = get_report_counts()
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.metric("📄 Total Reports", total)
-
-    with col2:
-        st.metric("⏳ Pending", pending)
-
-    with col3:
-        st.metric("✅ Resolved", resolved)
-
     reports = get_all_reports()
 
+    # ================= METRICS =================
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("📄 Total Reports", total)
+    col2.metric("⏳ Pending", pending)
+    col3.metric("✅ Resolved", resolved)
+
+    # ================= EMPTY CHECK =================
     if not reports:
-        st.info("No reports available")
+        st.warning("⚠ No reports available")
         return
 
-    df = pd.DataFrame(
-        reports,
-        columns=[
-            "ID",
-            "Report ID",
-            "Name",
-            "Location",
-            "Issue Type",
-            "Description",
-            "Severity",
-            "Image",
-            "Status",
-            "Date"
-        ]
-    )
+    # ================= DATAFRAME =================
+    df = pd.DataFrame(reports, columns=[
+        "ID",
+        "Report ID",
+        "Name",
+        "Location",
+        "Issue Type",
+        "Description",
+        "Severity",
+        "Image",
+        "Status",
+        "Date"
+    ])
 
+    # ================= PIE CHART =================
     st.subheader("📌 Status Distribution")
 
-    pie_data = pd.DataFrame({
+    pie_df = pd.DataFrame({
         "Status": ["Pending", "Resolved"],
         "Count": [pending, resolved]
     })
 
-    pie_chart = px.pie(
-        pie_data,
+    fig1 = px.pie(
+        pie_df,
         names="Status",
         values="Count",
-        title="Reports Status"
+        title="Report Status Distribution",
+        hole=0.4
     )
 
-    st.plotly_chart(
-        pie_chart,
-        use_container_width=True
-    )
+    st.plotly_chart(fig1, use_container_width=True)
 
+    # ================= BAR CHART =================
     st.subheader("📍 Reports by Location")
 
-    location_count = (
-        df["Location"]
-        .value_counts()
-        .reset_index()
-    )
+    location_df = df["Location"].value_counts().reset_index()
+    location_df.columns = ["Location", "Reports"]
 
-    location_count.columns = [
-        "Location",
-        "Reports"
-    ]
-
-    bar_chart = px.bar(
-        location_count,
+    fig2 = px.bar(
+        location_df,
         x="Location",
         y="Reports",
-        title="Reports by Location"
+        title="Reports by Location",
+        text="Reports"
     )
 
-    st.plotly_chart(
-        bar_chart,
-        use_container_width=True
+    fig2.update_traces(textposition="outside")
+
+    st.plotly_chart(fig2, use_container_width=True)
+
+    # ================= SEVERITY CHART (NEW ADDITION) =================
+    st.subheader("⚠ Severity Analysis")
+
+    severity_df = df["Severity"].value_counts().reset_index()
+    severity_df.columns = ["Severity", "Count"]
+
+    fig3 = px.bar(
+        severity_df,
+        x="Severity",
+        y="Count",
+        title="Severity Level Distribution",
+        text="Count"
     )
 
-    st.subheader("📋 Full Analytics Data")
+    fig3.update_traces(textposition="outside")
 
-    st.dataframe(
-        df,
-        use_container_width=True
-    )
+    st.plotly_chart(fig3, use_container_width=True)
+
+    # ================= TABLE =================
+    st.subheader("📋 Full Reports Data")
+
+    st.dataframe(df, use_container_width=True)
