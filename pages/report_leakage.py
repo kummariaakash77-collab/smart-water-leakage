@@ -1,72 +1,59 @@
 import streamlit as st
-from datetime import datetime
-from utils.report_manager import add_report
-import os
+from utils.report_manager import submit_report
 
-def show_report_page():
+def show_report_page(language):
 
-    st.title("💧 Report Water Leakage")
+    texts = {
+        "English": {
+            "title": "💧 Report Water Leakage",
+            "name": "Name",
+            "location": "Location",
+            "desc": "Description",
+            "submit": "Submit Report",
+            "success": "Report submitted successfully!"
+        },
+        "Hindi": {
+            "title": "💧 पानी रिसाव रिपोर्ट करें",
+            "name": "नाम",
+            "location": "स्थान",
+            "desc": "विवरण",
+            "submit": "रिपोर्ट जमा करें",
+            "success": "रिपोर्ट सफलतापूर्वक जमा हुई!"
+        },
+        "Telugu": {
+            "title": "💧 నీటి లీకేజ్ నివేదించండి",
+            "name": "పేరు",
+            "location": "స్థానం",
+            "desc": "వివరణ",
+            "submit": "సమర్పించండి",
+            "success": "రిపోర్ట్ విజయవంతంగా పంపబడింది!"
+        },
+        "Tamil": {
+            "title": "💧 நீர் கசிவு புகார்",
+            "name": "பெயர்",
+            "location": "இடம்",
+            "desc": "விவரம்",
+            "submit": "சமர்ப்பிக்கவும்",
+            "success": "அறிக்கை வெற்றிகரமாக அனுப்பப்பட்டது!"
+        },
+        "Kannada": {
+            "title": "💧 ನೀರಿನ ಸೋರಿಕೆ ವರದಿ",
+            "name": "ಹೆಸರು",
+            "location": "ಸ್ಥಳ",
+            "desc": "ವಿವರಣೆ",
+            "submit": "ಸಲ್ಲಿಸು",
+            "success": "ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!"
+        }
+    }
 
-    reporter_name = st.text_input("Your Name")
+    t = texts[language]
 
-    location = st.text_input("Location")
+    st.title(t["title"])
 
-    issue_type = st.selectbox(
-        "Leakage Type",
-        [
-            "Pipe Leakage",
-            "Water Tank Overflow",
-            "Broken Tap",
-            "Underground Leak"
-        ]
-    )
+    name = st.text_input(t["name"])
+    location = st.text_input(t["location"])
+    description = st.text_area(t["desc"])
 
-    description = st.text_area("Description")
-
-    severity = st.selectbox(
-        "Severity",
-        ["Low", "Medium", "High"]
-    )
-
-    uploaded_file = st.file_uploader(
-        "Upload Leakage Photo",
-        type=["jpg", "jpeg", "png"]
-    )
-
-    if uploaded_file is not None:
-        st.image(
-            uploaded_file,
-            caption="Leakage Image Preview",
-            use_container_width=True
-        )
-
-    if st.button("Submit Report"):
-
-        report_id = f"WL{int(datetime.now().timestamp())}"
-
-        image_path = ""
-
-        if uploaded_file:
-
-            os.makedirs("uploads/images", exist_ok=True)
-
-            image_path = f"uploads/images/{report_id}_{uploaded_file.name}"
-
-            with open(image_path, "wb") as f:
-                f.write(uploaded_file.getbuffer())
-
-        add_report(
-            report_id,
-            reporter_name,
-            location,
-            issue_type,
-            description,
-            severity,
-            image_path,
-            "Pending",
-            str(datetime.now())
-        )
-
-        st.success(
-            f"✅ Report Submitted Successfully! ID: {report_id}"
-        )
+    if st.button(t["submit"]):
+        submit_report(name, location, description)
+        st.success(t["success"])

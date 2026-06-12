@@ -1,70 +1,32 @@
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-from utils.report_manager import get_all_reports
+from utils.report_manager import get_report_counts
 
+def show_analytics_page(language):
 
-def show_analytics_page():
+    texts = {
+        "English": {
+            "title": "📊 Analytics"
+        },
+        "Hindi": {
+            "title": "📊 एनालिटिक्स"
+        },
+        "Telugu": {
+            "title": "📊 విశ్లేషణలు"
+        },
+        "Tamil": {
+            "title": "📊 பகுப்பாய்வு"
+        },
+        "Kannada": {
+            "title": "📊 ವಿಶ್ಲೇಷಣೆ"
+        }
+    }
 
-    st.title("📊 Water Leakage Analytics")
+    t = texts[language]
 
-    reports = get_all_reports()
+    st.title(t["title"])
 
-    if not reports:
-        st.warning("No reports available.")
-        return
+    total, pending, resolved = get_report_counts()
 
-    df = pd.DataFrame(
-        reports,
-        columns=[
-            "ID",
-            "Report ID",
-            "Reporter",
-            "Location",
-            "Issue Type",
-            "Description",
-            "Severity",
-            "Image",
-            "Status",
-            "Date"
-        ]
-    )
-
-    st.subheader("Reports by Status")
-
-    status_chart = px.pie(
-        df,
-        names="Status",
-        title="Report Status Distribution"
-    )
-
-    st.plotly_chart(
-        status_chart,
-        use_container_width=True
-    )
-
-    st.subheader("Reports by Severity")
-
-    severity_chart = px.bar(
-        df,
-        x="Severity",
-        title="Severity Distribution"
-    )
-
-    st.plotly_chart(
-        severity_chart,
-        use_container_width=True
-    )
-
-    st.subheader("Reports by Issue Type")
-
-    issue_chart = px.histogram(
-        df,
-        x="Issue Type",
-        title="Issue Type Distribution"
-    )
-
-    st.plotly_chart(
-        issue_chart,
-        use_container_width=True
-    )
+    st.metric("Total", total)
+    st.metric("Pending", pending)
+    st.metric("Resolved", resolved)

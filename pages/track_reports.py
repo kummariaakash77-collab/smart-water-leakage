@@ -1,67 +1,34 @@
 import streamlit as st
-import pandas as pd
-from utils.report_manager import get_all_reports
+from utils.report_manager import get_reports
 
-def show_track_page():
+def show_track_page(language):
 
-    st.title("📋 Track Reports")
+    texts = {
+        "English": {
+            "title": "📋 Track Reports"
+        },
+        "Hindi": {
+            "title": "📋 रिपोर्ट ट्रैक करें"
+        },
+        "Telugu": {
+            "title": "📋 రిపోర్ట్ ట్రాక్ చేయండి"
+        },
+        "Tamil": {
+            "title": "📋 அறிக்கைகளை கண்காணிக்க"
+        },
+        "Kannada": {
+            "title": "📋 ವರದಿಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ"
+        }
+    }
 
-    reports = get_all_reports()
+    t = texts[language]
+
+    st.title(t["title"])
+
+    reports = get_reports()
 
     if not reports:
-        st.warning("No reports found.")
-        return
-
-    df = pd.DataFrame(
-        reports,
-        columns=[
-            "ID",
-            "Report ID",
-            "Reporter",
-            "Location",
-            "Issue Type",
-            "Description",
-            "Severity",
-            "Image",
-            "Status",
-            "Date"
-        ]
-    )
-
-    st.subheader("🔍 Search Report")
-
-    search_id = st.text_input(
-        "Enter Report ID"
-    )
-
-    # 📥 Download CSV
-    csv = df.to_csv(index=False).encode("utf-8")
-
-    st.download_button(
-        label="📥 Download Reports CSV",
-        data=csv,
-        file_name="water_leakage_reports.csv",
-        mime="text/csv"
-    )
-
-    if search_id:
-        filtered_df = df[
-            df["Report ID"].astype(str).str.contains(
-                search_id,
-                case=False,
-                na=False
-            )
-        ]
-
-        if filtered_df.empty:
-            st.error("No matching report found.")
-        else:
-            st.dataframe(
-                filtered_df,
-                use_container_width=True
-            )
+        st.info("No reports found")
     else:
-        st.dataframe(
-            df,
-            use_container_width=True
-        )
+        for r in reports:
+            st.write(r)
