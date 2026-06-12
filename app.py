@@ -1,6 +1,13 @@
 import streamlit as st
 from utils.db import create_tables
 
+# ---------------- SAFE AI IMPORT ----------------
+try:
+    from pages.ai_assistant import show_ai_page
+    AI_AVAILABLE = True
+except:
+    AI_AVAILABLE = False
+
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="Smart Water Leakage Reporting",
@@ -70,6 +77,19 @@ load_css()
 # ---------------- DB INIT ----------------
 create_tables()
 
+# ---------------- AI FEATURES (NEW) ----------------
+st.sidebar.markdown("## 🤖 AI Features")
+
+ai_mode = st.sidebar.radio(
+    "Choose AI Mode",
+    ["None", "Local AI (Ollama)", "BYOK (API Key)"]
+)
+
+api_key = None
+
+if ai_mode == "BYOK (API Key)":
+    api_key = st.sidebar.text_input("Enter API Key", type="password")
+
 # ---------------- NAVIGATION ----------------
 page = st.sidebar.radio(
     texts[language]["nav_title"],
@@ -78,7 +98,8 @@ page = st.sidebar.radio(
         texts[language]["nav_report"],
         texts[language]["nav_track"],
         texts[language]["nav_admin"],
-        texts[language]["nav_analytics"]
+        texts[language]["nav_analytics"],
+        "🤖 AI Assistant"
     ]
 )
 
@@ -102,3 +123,10 @@ elif page == texts[language]["nav_admin"]:
 elif page == texts[language]["nav_analytics"]:
     from pages.analytics import show_analytics_page
     show_analytics_page(language)
+
+# ---------------- AI PAGE (NEW) ----------------
+elif page == "🤖 AI Assistant":
+    if AI_AVAILABLE:
+        show_ai_page(language, ai_mode, api_key)
+    else:
+        st.error("❌ AI module missing. Create pages/ai_assistant.py")
