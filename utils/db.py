@@ -1,9 +1,14 @@
 import sqlite3
+import os
 
-DB_NAME = "database/water_leakage.db"
+DB_FOLDER = "database"
+DB_NAME = os.path.join(DB_FOLDER, "water_leakage.db")
+
 
 def get_connection():
+    os.makedirs(DB_FOLDER, exist_ok=True)
     return sqlite3.connect(DB_NAME)
+
 
 def create_tables():
     conn = get_connection()
