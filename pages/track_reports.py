@@ -1,34 +1,54 @@
 import streamlit as st
+import pandas as pd
 from utils.report_manager import get_reports
 
 def show_track_page(language):
 
-    texts = {
-        "English": {
-            "title": "📋 Track Reports"
-        },
-        "Hindi": {
-            "title": "📋 रिपोर्ट ट्रैक करें"
-        },
-        "Telugu": {
-            "title": "📋 రిపోర్ట్ ట్రాక్ చేయండి"
-        },
-        "Tamil": {
-            "title": "📋 அறிக்கைகளை கண்காணிக்க"
-        },
-        "Kannada": {
-            "title": "📋 ವರದಿಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ"
-        }
-    }
-
-    t = texts[language]
-
-    st.title(t["title"])
+    st.title("📋 Track Reports")
 
     reports = get_reports()
 
     if not reports:
         st.info("No reports found")
-    else:
-        for r in reports:
-            st.write(r)
+        return
+
+    search_id = st.text_input("🔍 Search Report ID")
+
+    filtered_reports = reports
+
+    if search_id:
+        filtered_reports = [
+            r for r in reports
+            if search_id.lower() in str(r[1]).lower()
+        ]
+
+    df = pd.DataFrame(
+        filtered_reports,
+        columns=[
+            "ID",
+            "Report ID",
+            "Name",
+            "Location",
+            "Issue Type",
+            "Description",
+            "Severity",
+            "Image",
+            "Status",
+            "Date"
+        ]
+    )
+
+    st.dataframe(
+        df,
+        use_container_width=True,
+        hide_index=True
+    )
+
+    csv = df.to_csv(index=False)
+
+    st.download_button(
+        "📥 Download Reports CSV",
+        csv,
+        "water_reports.csv",
+        "text/csv"
+    )

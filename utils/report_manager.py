@@ -1,4 +1,5 @@
 from utils.db import get_connection
+from datetime import datetime
 
 
 def add_report(
@@ -47,12 +48,38 @@ def add_report(
     conn.close()
 
 
+def submit_report(
+    reporter_name,
+    location,
+    issue_type,
+    description,
+    severity,
+    image_path=""
+):
+    report_id = f"RPT-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+
+    add_report(
+        report_id=report_id,
+        reporter_name=reporter_name,
+        location=location,
+        issue_type=issue_type,
+        description=description,
+        severity=severity,
+        image_path=image_path,
+        status="Pending",
+        date_reported=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    )
+
+    return report_id
+
+
 def get_all_reports():
     conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT * FROM reports
+        SELECT *
+        FROM reports
         ORDER BY id DESC
     """)
 
@@ -64,6 +91,21 @@ def get_all_reports():
 
 def get_reports():
     return get_all_reports()
+
+
+def search_report(report_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM reports WHERE report_id = ?",
+        (report_id,)
+    )
+
+    report = cursor.fetchone()
+
+    conn.close()
+    return report
 
 
 def update_status(report_id, status):
@@ -90,30 +132,16 @@ def get_report_counts():
     cursor.execute("SELECT COUNT(*) FROM reports")
     total = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
+    cursor.execute(
+        "SELECT COUNT(*) FROM reports WHERE status='Pending'"
+    )
     pending = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Resolved'")
+    cursor.execute(
+        "SELECT COUNT(*) FROM reports WHERE status='Resolved'"
+    )
     resolved = cursor.fetchone()[0]
 
     conn.close()
 
     return total, pending, resolved
-
-
-def submit_report(name, location, description):
-    from datetime import datetime
-
-    report_id = f"RPT-{datetime.now().strftime('%Y%m%d%H%M%S')}"
-
-    add_report(
-        report_id=report_id,
-        reporter_name=name,
-        location=location,
-        issue_type="Water Leakage",
-        description=description,
-        severity="Medium",
-        image_path="",
-        status="Pending",
-        date_reported=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    )

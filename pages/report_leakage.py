@@ -1,59 +1,68 @@
 import streamlit as st
+import os
 from utils.report_manager import submit_report
 
 def show_report_page(language):
 
-    texts = {
-        "English": {
-            "title": "💧 Report Water Leakage",
-            "name": "Name",
-            "location": "Location",
-            "desc": "Description",
-            "submit": "Submit Report",
-            "success": "Report submitted successfully!"
-        },
-        "Hindi": {
-            "title": "💧 पानी रिसाव रिपोर्ट करें",
-            "name": "नाम",
-            "location": "स्थान",
-            "desc": "विवरण",
-            "submit": "रिपोर्ट जमा करें",
-            "success": "रिपोर्ट सफलतापूर्वक जमा हुई!"
-        },
-        "Telugu": {
-            "title": "💧 నీటి లీకేజ్ నివేదించండి",
-            "name": "పేరు",
-            "location": "స్థానం",
-            "desc": "వివరణ",
-            "submit": "సమర్పించండి",
-            "success": "రిపోర్ట్ విజయవంతంగా పంపబడింది!"
-        },
-        "Tamil": {
-            "title": "💧 நீர் கசிவு புகார்",
-            "name": "பெயர்",
-            "location": "இடம்",
-            "desc": "விவரம்",
-            "submit": "சமர்ப்பிக்கவும்",
-            "success": "அறிக்கை வெற்றிகரமாக அனுப்பப்பட்டது!"
-        },
-        "Kannada": {
-            "title": "💧 ನೀರಿನ ಸೋರಿಕೆ ವರದಿ",
-            "name": "ಹೆಸರು",
-            "location": "ಸ್ಥಳ",
-            "desc": "ವಿವರಣೆ",
-            "submit": "ಸಲ್ಲಿಸು",
-            "success": "ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ!"
-        }
-    }
+    st.title("💧 Report Water Leakage")
 
-    t = texts[language]
+    name = st.text_input("👤 Name")
 
-    st.title(t["title"])
+    location = st.text_input("📍 Location")
 
-    name = st.text_input(t["name"])
-    location = st.text_input(t["location"])
-    description = st.text_area(t["desc"])
+    issue_type = st.selectbox(
+        "🚰 Issue Type",
+        [
+            "Water Leakage",
+            "Pipe Burst",
+            "Drain Overflow",
+            "Water Waste"
+        ]
+    )
 
-    if st.button(t["submit"]):
-        submit_report(name, location, description)
-        st.success(t["success"])
+    severity = st.selectbox(
+        "⚠️ Severity",
+        [
+            "Low",
+            "Medium",
+            "High"
+        ]
+    )
+
+    description = st.text_area("📝 Description")
+
+    uploaded_file = st.file_uploader(
+        "📸 Upload Image",
+        type=["jpg", "jpeg", "png"]
+    )
+
+    image_path = ""
+
+    if uploaded_file is not None:
+
+        os.makedirs("uploads", exist_ok=True)
+
+        image_path = os.path.join(
+            "uploads",
+            uploaded_file.name
+        )
+
+        with open(image_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+
+        st.image(image_path, width=300)
+
+    if st.button("📤 Submit Report"):
+
+        report_id = submit_report(
+            reporter_name=name,
+            location=location,
+            issue_type=issue_type,
+            description=description,
+            severity=severity,
+            image_path=image_path
+        )
+
+        st.success(
+            f"Report Submitted Successfully! Report ID: {report_id}"
+        )
