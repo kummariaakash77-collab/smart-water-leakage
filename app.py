@@ -77,8 +77,8 @@ load_css()
 # ---------------- DB INIT ----------------
 create_tables()
 
-# ---------------- 🔥 DEPLOYMENT TEST (ADDED LINE) ----------------
-st.sidebar.success("Deployment refresh test")
+# 🔥 STEP 2 FORCE REDEPLOY TRIGGER (ADDED)
+st.sidebar.info("FORCE REDEPLOY TRIGGER - AI FIX")
 
 # ---------------- NAVIGATION ----------------
 page = st.sidebar.radio(
