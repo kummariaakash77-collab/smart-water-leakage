@@ -77,7 +77,7 @@ load_css()
 # ---------------- DB INIT ----------------
 create_tables()
 
-# ---------------- AI FEATURES (NEW) ----------------
+# ---------------- AI FEATURES (SIDEBAR) ----------------
 st.sidebar.markdown("## 🤖 AI Features")
 
 ai_mode = st.sidebar.radio(
@@ -124,9 +124,9 @@ elif page == texts[language]["nav_analytics"]:
     from pages.analytics import show_analytics_page
     show_analytics_page(language)
 
-# ---------------- AI PAGE (NEW) ----------------
+# ---------------- AI PAGE ----------------
 elif page == "🤖 AI Assistant":
     if AI_AVAILABLE:
         show_ai_page(language, ai_mode, api_key)
     else:
-        st.error("❌ AI module missing. Create pages/ai_assistant.py")
+        st.error("❌ AI module missing. Please create pages/ai_assistant.py")
