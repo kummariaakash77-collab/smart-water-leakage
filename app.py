@@ -77,18 +77,8 @@ load_css()
 # ---------------- DB INIT ----------------
 create_tables()
 
-# ---------------- AI FEATURES (SIDEBAR) ----------------
-st.sidebar.markdown("## 🤖 AI Features")
-
-ai_mode = st.sidebar.radio(
-    "Choose AI Mode",
-    ["None", "Local AI (Ollama)", "BYOK (API Key)"]
-)
-
-api_key = None
-
-if ai_mode == "BYOK (API Key)":
-    api_key = st.sidebar.text_input("Enter API Key", type="password")
+# ---------------- 🔥 DEPLOYMENT TEST (ADDED LINE) ----------------
+st.sidebar.success("Deployment refresh test")
 
 # ---------------- NAVIGATION ----------------
 page = st.sidebar.radio(
@@ -127,6 +117,9 @@ elif page == texts[language]["nav_analytics"]:
 # ---------------- AI PAGE ----------------
 elif page == "🤖 AI Assistant":
     if AI_AVAILABLE:
+        from pages.ai_assistant import show_ai_page
+        ai_mode = st.sidebar.selectbox("AI Mode", ["Local AI (Ollama)", "BYOK (API Key)"])
+        api_key = st.sidebar.text_input("API Key (if BYOK)", type="password")
         show_ai_page(language, ai_mode, api_key)
     else:
         st.error("❌ AI module missing. Please create pages/ai_assistant.py")
