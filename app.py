@@ -1,19 +1,22 @@
 import streamlit as st
 from utils.db import create_tables
 
-# ---------------- SAFE AI IMPORT ----------------
-try:
-    from pages.ai_assistant import show_ai_page
-    AI_AVAILABLE = True
-except:
-    AI_AVAILABLE = False
-
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="Smart Water Leakage Reporting",
     page_icon="💧",
     layout="wide"
 )
+
+# ---------------- SAFE AI IMPORT ----------------
+def load_ai():
+    try:
+        from pages.ai_assistant import show_ai_page
+        return True, show_ai_page
+    except Exception:
+        return False, None
+
+AI_AVAILABLE, ai_page = load_ai()
 
 # ---------------- LANGUAGE SYSTEM ----------------
 language = st.sidebar.selectbox(
@@ -64,21 +67,39 @@ texts = {
     }
 }
 
-# ---------------- CSS ----------------
+# ---------------- CSS LOADER ----------------
 def load_css():
-    with open("assets/styles.css", "r", encoding="utf-8") as f:
-        st.markdown(
-            f"<style>{f.read()}</style>",
-            unsafe_allow_html=True
-        )
+    try:
+        with open("assets/styles.css", "r", encoding="utf-8") as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    except:
+        st.warning("⚠️ CSS file missing")
 
 load_css()
 
 # ---------------- DB INIT ----------------
 create_tables()
 
-# 🔥 STEP 2 FORCE REDEPLOY TRIGGER (ADDED)
-st.sidebar.info("FORCE REDEPLOY TRIGGER - AI FIX")
+# ---------------- DEPLOYMENT STATUS ----------------
+st.sidebar.success("🟢 App Running Successfully")
+
+# ---------------- AI SETTINGS ----------------
+st.sidebar.markdown("## 🤖 AI Features")
+
+ai_mode = st.sidebar.radio(
+    "Choose AI Mode",
+    ["None", "Local AI (Ollama)", "BYOK (API Key)"],
+    key="ai_mode"
+)
+
+api_key = ""
+
+if ai_mode == "BYOK (API Key)":
+    api_key = st.sidebar.text_input(
+        "Enter API Key",
+        type="password",
+        key="api_key"
+    )
 
 # ---------------- NAVIGATION ----------------
 page = st.sidebar.radio(
@@ -90,7 +111,8 @@ page = st.sidebar.radio(
         texts[language]["nav_admin"],
         texts[language]["nav_analytics"],
         "🤖 AI Assistant"
-    ]
+    ],
+    key="main_nav"
 )
 
 # ---------------- ROUTING ----------------
@@ -116,10 +138,7 @@ elif page == texts[language]["nav_analytics"]:
 
 # ---------------- AI PAGE ----------------
 elif page == "🤖 AI Assistant":
-    if AI_AVAILABLE:
-        from pages.ai_assistant import show_ai_page
-        ai_mode = st.sidebar.selectbox("AI Mode", ["Local AI (Ollama)", "BYOK (API Key)"])
-        api_key = st.sidebar.text_input("API Key (if BYOK)", type="password")
-        show_ai_page(language, ai_mode, api_key)
+    if AI_AVAILABLE and ai_page:
+        ai_page(language, ai_mode, api_key)
     else:
-        st.error("❌ AI module missing. Please create pages/ai_assistant.py")
+        st.error("❌ AI module not loaded. Please check pages/ai_assistant.py and redeploy.")
