@@ -1,0 +1,100 @@
+def get_texts(language):
+
+    texts = {
+        "English": {
+            "report_title": "💧 Report Water Leakage",
+            "name": "👤 Name",
+            "location": "📍 Location",
+            "issue_type": "🚰 Issue Type",
+            "severity": "⚠️ Severity",
+            "description": "📝 Description",
+            "upload": "📸 Upload Image",
+            "submit": "📤 Submit Report",
+            "success": "Report Submitted Successfully! Report ID: ",
+            "water_leakage": "Water Leakage",
+            "pipe_burst": "Pipe Burst",
+            "drain_overflow": "Drain Overflow",
+            "water_waste": "Water Waste",
+            "low": "Low",
+            "medium": "Medium",
+            "high": "High"
+        },
+
+        "Hindi": {
+            "report_title": "💧 पानी रिसाव रिपोर्ट करें",
+            "name": "👤 नाम",
+            "location": "📍 स्थान",
+            "issue_type": "🚰 समस्या प्रकार",
+            "severity": "⚠️ गंभीरता",
+            "description": "📝 विवरण",
+            "upload": "📸 छवि अपलोड करें",
+            "submit": "📤 रिपोर्ट जमा करें",
+            "success": "रिपोर्ट सफलतापूर्वक जमा हुई! रिपोर्ट आईडी: ",
+            "water_leakage": "पानी रिसाव",
+            "pipe_burst": "पाइप फटना",
+            "drain_overflow": "नाली ओवरफ्लो",
+            "water_waste": "पानी की बर्बादी",
+            "low": "कम",
+            "medium": "मध्यम",
+            "high": "उच्च"
+        },
+
+        "Telugu": {
+            "report_title": "💧 నీటి లీకేజీ నివేదించండి",
+            "name": "👤 పేరు",
+            "location": "📍 స్థానం",
+            "issue_type": "🚰 సమస్య రకం",
+            "severity": "⚠️ తీవ్రత",
+            "description": "📝 వివరణ",
+            "upload": "📸 చిత్రం అప్‌లోడ్ చేయండి",
+            "submit": "📤 రిపోర్ట్ సమర్పించండి",
+            "success": "రిపోర్ట్ విజయవంతంగా సమర్పించబడింది! రిపోర్ట్ ID: ",
+            "water_leakage": "నీటి లీకేజీ",
+            "pipe_burst": "పైప్ పగిలింది",
+            "drain_overflow": "డ్రైన్ ఓవర్‌ఫ్లో",
+            "water_waste": "నీటి వృథా",
+            "low": "తక్కువ",
+            "medium": "మధ్యస్థ",
+            "high": "అధిక"
+        },
+
+        "Tamil": {
+            "report_title": "💧 நீர் கசிவை புகாரளிக்கவும்",
+            "name": "👤 பெயர்",
+            "location": "📍 இடம்",
+            "issue_type": "🚰 பிரச்சனை வகை",
+            "severity": "⚠️ தீவிரம்",
+            "description": "📝 விளக்கம்",
+            "upload": "📸 படம் பதிவேற்றவும்",
+            "submit": "📤 அறிக்கை சமர்ப்பிக்கவும்",
+            "success": "அறிக்கை வெற்றிகரமாக சமர்ப்பிக்கப்பட்டது! அறிக்கை ஐடி: ",
+            "water_leakage": "நீர் கசிவு",
+            "pipe_burst": "குழாய் உடைப்பு",
+            "drain_overflow": "வடிகால் நிரம்பல்",
+            "water_waste": "நீர் வீணாக்கம்",
+            "low": "குறைவு",
+            "medium": "நடுத்தரம்",
+            "high": "அதிகம்"
+        },
+
+        "Kannada": {
+            "report_title": "💧 ನೀರಿನ ಸೋರಿಕೆ ವರದಿ ಮಾಡಿ",
+            "name": "👤 ಹೆಸರು",
+            "location": "📍 ಸ್ಥಳ",
+            "issue_type": "🚰 ಸಮಸ್ಯೆ ಪ್ರಕಾರ",
+            "severity": "⚠️ ತೀವ್ರತೆ",
+            "description": "📝 ವಿವರಣೆ",
+            "upload": "📸 ಚಿತ್ರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+            "submit": "📤 ವರದಿ ಸಲ್ಲಿಸಿ",
+            "success": "ವರದಿ ಯಶಸ್ವಿಯಾಗಿ ಸಲ್ಲಿಸಲಾಗಿದೆ! ವರದಿ ID: ",
+            "water_leakage": "ನೀರಿನ ಸೋರಿಕೆ",
+            "pipe_burst": "ಪೈಪ್ ಸಿಡಿತ",
+            "drain_overflow": "ಚರಂಡಿ ತುಂಬಿಕೆ",
+            "water_waste": "ನೀರಿನ ವ್ಯರ್ಥ",
+            "low": "ಕಡಿಮೆ",
+            "medium": "ಮಧ್ಯಮ",
+            "high": "ಹೆಚ್ಚು"
+        }
+    }
+
+    return texts.get(language, texts["English"])

@@ -1,38 +1,42 @@
 import streamlit as st
 import os
 from utils.report_manager import submit_report
+from utils.translations import get_texts
+
 
 def show_report_page(language):
 
-    st.title("💧 Report Water Leakage")
+    t = get_texts(language)
 
-    name = st.text_input("👤 Name")
+    st.title(t["report_title"])
 
-    location = st.text_input("📍 Location")
+    name = st.text_input(t["name"])
+
+    location = st.text_input(t["location"])
 
     issue_type = st.selectbox(
-        "🚰 Issue Type",
+        t["issue_type"],
         [
-            "Water Leakage",
-            "Pipe Burst",
-            "Drain Overflow",
-            "Water Waste"
+            t["water_leakage"],
+            t["pipe_burst"],
+            t["drain_overflow"],
+            t["water_waste"]
         ]
     )
 
     severity = st.selectbox(
-        "⚠️ Severity",
+        t["severity"],
         [
-            "Low",
-            "Medium",
-            "High"
+            t["low"],
+            t["medium"],
+            t["high"]
         ]
     )
 
-    description = st.text_area("📝 Description")
+    description = st.text_area(t["description"])
 
     uploaded_file = st.file_uploader(
-        "📸 Upload Image",
+        t["upload"],
         type=["jpg", "jpeg", "png"]
     )
 
@@ -52,7 +56,7 @@ def show_report_page(language):
 
         st.image(image_path, width=300)
 
-    if st.button("📤 Submit Report"):
+    if st.button(t["submit"]):
 
         report_id = submit_report(
             reporter_name=name,
@@ -63,6 +67,4 @@ def show_report_page(language):
             image_path=image_path
         )
 
-        st.success(
-            f"Report Submitted Successfully! Report ID: {report_id}"
-        )
+        st.success(f"{t['success']}{report_id}")
