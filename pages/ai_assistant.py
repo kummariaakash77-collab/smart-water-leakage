@@ -5,6 +5,13 @@ import google.generativeai as genai
 
 from utils.report_manager import get_report_counts, get_all_reports
 
+from agents.water_agent.tools import (
+    get_water_reports,
+    get_pending_reports,
+    get_resolved_reports,
+    get_summary,
+)
+
 
 # ---------------- LOCAL AI (OLLAMA) ----------------
 def run_ollama(prompt):
@@ -90,8 +97,7 @@ User Question:
             st.success("AI Response")
             st.write(result)
 
-
-        # ---------------- BYOK (GEMINI FIXED) ----------------
+        # ---------------- BYOK (GEMINI) ----------------
         elif ai_mode == "BYOK (API Key)":
 
             if not api_key:
@@ -101,7 +107,6 @@ User Question:
             try:
                 genai.configure(api_key=api_key)
 
-                # 🔥 AUTO SAFE MODEL (NO 404 EVER)
                 models = genai.list_models()
 
                 model_name = None
@@ -111,7 +116,7 @@ User Question:
                         break
 
                 if not model_name:
-                    st.error("No compatible Gemini model found for this API key")
+                    st.error("No compatible Gemini model found")
                     return
 
                 model = genai.GenerativeModel(model_name)
@@ -136,6 +141,51 @@ User Question:
             except Exception as e:
                 st.error(f"Gemini Error: {str(e)}")
 
+        # ---------------- GOOGLE ADK AGENT ----------------
+        elif ai_mode == "Google ADK Agent":
+
+            question = user_input.lower()
+
+            if "pending" in question:
+
+                result = get_pending_reports()
+
+                st.success("🤖 ADK Agent Response")
+                st.write(
+                    f"Pending Reports: {result['pending_reports']}"
+                )
+
+            elif "resolved" in question:
+
+                result = get_resolved_reports()
+
+                st.success("🤖 ADK Agent Response")
+                st.write(
+                    f"Resolved Reports: {result['resolved_reports']}"
+                )
+
+            elif (
+                "summary" in question
+                or "statistics" in question
+                or "report" in question
+            ):
+
+                result = get_summary()
+
+                st.success("🤖 ADK Agent Response")
+                st.text(result)
+
+            else:
+
+                result = get_water_reports()
+
+                st.success("🤖 ADK Agent Response")
+
+                st.json({
+                    "total_reports": result["total_reports"],
+                    "pending_reports": result["pending_reports"],
+                    "resolved_reports": result["resolved_reports"]
+                })
 
         # ---------------- NONE ----------------
         else:

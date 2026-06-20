@@ -88,9 +88,15 @@ st.sidebar.markdown("## 🤖 AI Features")
 
 ai_mode = st.sidebar.radio(
     "Choose AI Mode",
-    ["None", "Local AI (Ollama)", "BYOK (API Key)"],
+    [
+        "None",
+        "Local AI (Ollama)",
+        "BYOK (API Key)",
+        "Google ADK Agent"
+    ],
     key="ai_mode"
 )
+
 
 api_key = ""
 
