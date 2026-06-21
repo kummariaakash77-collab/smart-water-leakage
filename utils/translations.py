@@ -17,9 +17,8 @@ def get_texts(language):
             "water_waste": "Water Waste",
             "low": "Low",
             "medium": "Medium",
-            "high": "High"
+            "high": "High",
         },
-
         "Hindi": {
             "report_title": "💧 पानी रिसाव रिपोर्ट करें",
             "name": "👤 नाम",
@@ -36,9 +35,8 @@ def get_texts(language):
             "water_waste": "पानी की बर्बादी",
             "low": "कम",
             "medium": "मध्यम",
-            "high": "उच्च"
+            "high": "उच्च",
         },
-
         "Telugu": {
             "report_title": "💧 నీటి లీకేజీ నివేదించండి",
             "name": "👤 పేరు",
@@ -55,9 +53,8 @@ def get_texts(language):
             "water_waste": "నీటి వృథా",
             "low": "తక్కువ",
             "medium": "మధ్యస్థ",
-            "high": "అధిక"
+            "high": "అధిక",
         },
-
         "Tamil": {
             "report_title": "💧 நீர் கசிவை புகாரளிக்கவும்",
             "name": "👤 பெயர்",
@@ -74,9 +71,8 @@ def get_texts(language):
             "water_waste": "நீர் வீணாக்கம்",
             "low": "குறைவு",
             "medium": "நடுத்தரம்",
-            "high": "அதிகம்"
+            "high": "அதிகம்",
         },
-
         "Kannada": {
             "report_title": "💧 ನೀರಿನ ಸೋರಿಕೆ ವರದಿ ಮಾಡಿ",
             "name": "👤 ಹೆಸರು",
@@ -93,8 +89,8 @@ def get_texts(language):
             "water_waste": "ನೀರಿನ ವ್ಯರ್ಥ",
             "low": "ಕಡಿಮೆ",
             "medium": "ಮಧ್ಯಮ",
-            "high": "ಹೆಚ್ಚು"
-        }
+            "high": "ಹೆಚ್ಚು",
+        },
     }
 
     return texts.get(language, texts["English"])

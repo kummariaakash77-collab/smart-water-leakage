@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from utils.report_manager import get_reports
 
+
 def show_track_page(language):
 
     texts = {
@@ -9,32 +10,32 @@ def show_track_page(language):
             "title": "📋 Track Reports",
             "search": "🔍 Search Report ID",
             "download": "📥 Download Reports CSV",
-            "empty": "No reports found"
+            "empty": "No reports found",
         },
         "Hindi": {
             "title": "📋 रिपोर्ट ट्रैक करें",
             "search": "🔍 रिपोर्ट आईडी खोजें",
             "download": "📥 रिपोर्ट CSV डाउनलोड करें",
-            "empty": "कोई रिपोर्ट नहीं मिली"
+            "empty": "कोई रिपोर्ट नहीं मिली",
         },
         "Telugu": {
             "title": "📋 రిపోర్టులను ట్రాక్ చేయండి",
             "search": "🔍 రిపోర్ట్ ID వెతకండి",
             "download": "📥 CSV డౌన్‌లోడ్ చేయండి",
-            "empty": "రిపోర్టులు లభించలేదు"
+            "empty": "రిపోర్టులు లభించలేదు",
         },
         "Tamil": {
             "title": "📋 அறிக்கைகளை கண்காணிக்க",
             "search": "🔍 அறிக்கை ஐடியை தேடுங்கள்",
             "download": "📥 CSV பதிவிறக்கவும்",
-            "empty": "அறிக்கைகள் இல்லை"
+            "empty": "அறிக்கைகள் இல்லை",
         },
         "Kannada": {
             "title": "📋 ವರದಿಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ",
             "search": "🔍 ವರದಿ ID ಹುಡುಕಿ",
             "download": "📥 CSV ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
-            "empty": "ಯಾವುದೇ ವರದಿಗಳು ಕಂಡುಬಂದಿಲ್ಲ"
-        }
+            "empty": "ಯಾವುದೇ ವರದಿಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
+        },
     }
 
     t = texts.get(language, texts["English"])
@@ -53,8 +54,7 @@ def show_track_page(language):
 
     if search_id:
         filtered_reports = [
-            r for r in reports
-            if search_id.lower() in str(r[1]).lower()
+            r for r in reports if search_id.lower() in str(r[1]).lower()
         ]
 
     df = pd.DataFrame(
@@ -69,21 +69,12 @@ def show_track_page(language):
             "Severity",
             "Image",
             "Status",
-            "Date"
-        ]
+            "Date",
+        ],
     )
 
-    st.dataframe(
-        df,
-        width="stretch",
-        hide_index=True
-    )
+    st.dataframe(df, width="stretch", hide_index=True)
 
     csv = df.to_csv(index=False)
 
-    st.download_button(
-        t["download"],
-        csv,
-        "water_reports.csv",
-        "text/csv"
-    )
+    st.download_button(t["download"], csv, "water_reports.csv", "text/csv")

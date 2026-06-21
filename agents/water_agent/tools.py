@@ -17,7 +17,7 @@ def get_water_reports():
         "total_reports": total,
         "pending_reports": pending,
         "resolved_reports": resolved,
-        "reports": reports
+        "reports": reports,
     }
 
 
@@ -28,9 +28,7 @@ def get_pending_reports():
 
     total, pending, resolved = get_report_counts()
 
-    return {
-        "pending_reports": pending
-    }
+    return {"pending_reports": pending}
 
 
 def get_resolved_reports():
@@ -40,9 +38,7 @@ def get_resolved_reports():
 
     total, pending, resolved = get_report_counts()
 
-    return {
-        "resolved_reports": resolved
-    }
+    return {"resolved_reports": resolved}
 
 
 def get_summary():

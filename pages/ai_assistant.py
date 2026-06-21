@@ -18,11 +18,7 @@ def run_ollama(prompt):
     try:
         response = requests.post(
             "http://localhost:11434/api/generate",
-            json={
-                "model": "llama3",
-                "prompt": prompt,
-                "stream": False
-            }
+            json={"model": "llama3", "prompt": prompt, "stream": False},
         )
         return response.json().get("response", "")
     except:
@@ -35,10 +31,21 @@ def build_system_context():
     total, pending, resolved = get_report_counts()
     reports = get_all_reports()
 
-    df = pd.DataFrame(reports, columns=[
-        "ID", "Report ID", "Name", "Location", "Issue Type",
-        "Description", "Severity", "Image", "Status", "Date"
-    ])
+    df = pd.DataFrame(
+        reports,
+        columns=[
+            "ID",
+            "Report ID",
+            "Name",
+            "Location",
+            "Issue Type",
+            "Description",
+            "Severity",
+            "Image",
+            "Status",
+            "Date",
+        ],
+    )
 
     top_locations = "No data"
     if not df.empty:
@@ -74,14 +81,12 @@ def show_ai_page(language, ai_mode, api_key):
     user_input = st.text_area("💬 Ask your question", height=120)
 
     if st.button("🚀 Get Answer"):
-
         if not user_input.strip():
             st.warning("Please enter a question")
             return
 
         # ---------------- LOCAL AI (OLLAMA) ----------------
         if ai_mode == "Local AI (Ollama)":
-
             context = build_system_context()
 
             full_prompt = f"""
@@ -99,7 +104,6 @@ User Question:
 
         # ---------------- BYOK (GEMINI) ----------------
         elif ai_mode == "BYOK (API Key)":
-
             if not api_key:
                 st.error("Please enter Gemini API Key in sidebar")
                 return
@@ -143,49 +147,42 @@ User Question:
 
         # ---------------- GOOGLE ADK AGENT ----------------
         elif ai_mode == "Google ADK Agent":
-
             question = user_input.lower()
 
             if "pending" in question:
-
                 result = get_pending_reports()
 
                 st.success("🤖 ADK Agent Response")
-                st.write(
-                    f"Pending Reports: {result['pending_reports']}"
-                )
+                st.write(f"Pending Reports: {result['pending_reports']}")
 
             elif "resolved" in question:
-
                 result = get_resolved_reports()
 
                 st.success("🤖 ADK Agent Response")
-                st.write(
-                    f"Resolved Reports: {result['resolved_reports']}"
-                )
+                st.write(f"Resolved Reports: {result['resolved_reports']}")
 
             elif (
                 "summary" in question
                 or "statistics" in question
                 or "report" in question
             ):
-
                 result = get_summary()
 
                 st.success("🤖 ADK Agent Response")
                 st.text(result)
 
             else:
-
                 result = get_water_reports()
 
                 st.success("🤖 ADK Agent Response")
 
-                st.json({
-                    "total_reports": result["total_reports"],
-                    "pending_reports": result["pending_reports"],
-                    "resolved_reports": result["resolved_reports"]
-                })
+                st.json(
+                    {
+                        "total_reports": result["total_reports"],
+                        "pending_reports": result["pending_reports"],
+                        "resolved_reports": result["resolved_reports"],
+                    }
+                )
 
         # ---------------- NONE ----------------
         else:

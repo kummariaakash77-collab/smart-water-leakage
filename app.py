@@ -3,25 +3,25 @@ from utils.db import create_tables
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
-    page_title="Smart Water Leakage Reporting",
-    page_icon="💧",
-    layout="wide"
+    page_title="Smart Water Leakage Reporting", page_icon="💧", layout="wide"
 )
+
 
 # ---------------- SAFE AI IMPORT ----------------
 def load_ai():
     try:
         from pages.ai_assistant import show_ai_page
+
         return True, show_ai_page
     except Exception:
         return False, None
+
 
 AI_AVAILABLE, ai_page = load_ai()
 
 # ---------------- LANGUAGE SYSTEM ----------------
 language = st.sidebar.selectbox(
-    "🌐 Language / भाषा चुनें",
-    ["English", "Hindi", "Telugu", "Tamil", "Kannada"]
+    "🌐 Language / भाषा चुनें", ["English", "Hindi", "Telugu", "Tamil", "Kannada"]
 )
 
 texts = {
@@ -31,7 +31,7 @@ texts = {
         "nav_track": "📋 Track Reports",
         "nav_admin": "👨‍💼 Admin Dashboard",
         "nav_analytics": "📊 Analytics",
-        "nav_title": "Navigation"
+        "nav_title": "Navigation",
     },
     "Hindi": {
         "nav_home": "🏠 होम",
@@ -39,7 +39,7 @@ texts = {
         "nav_track": "📋 रिपोर्ट ट्रैक करें",
         "nav_admin": "👨‍💼 एडमिन डैशबोर्ड",
         "nav_analytics": "📊 एनालिटिक्स",
-        "nav_title": "नेविगेशन"
+        "nav_title": "नेविगेशन",
     },
     "Telugu": {
         "nav_home": "🏠 హోమ్",
@@ -47,7 +47,7 @@ texts = {
         "nav_track": "📋 రిపోర్ట్ ట్రాక్ చేయండి",
         "nav_admin": "👨‍💼 అడ్మిన్ డ్యాష్‌బోర్డ్",
         "nav_analytics": "📊 విశ్లేషణలు",
-        "nav_title": "నావిగేషన్"
+        "nav_title": "నావిగేషన్",
     },
     "Tamil": {
         "nav_home": "🏠 முகப்பு",
@@ -55,7 +55,7 @@ texts = {
         "nav_track": "📋 அறிக்கைகளை கண்காணிக்க",
         "nav_admin": "👨‍💼 நிர்வாகம்",
         "nav_analytics": "📊 பகுப்பாய்வு",
-        "nav_title": "வழிசெலுத்தல்"
+        "nav_title": "வழிசெலுத்தல்",
     },
     "Kannada": {
         "nav_home": "🏠 ಮನೆ",
@@ -63,9 +63,10 @@ texts = {
         "nav_track": "📋 ವರದಿಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ",
         "nav_admin": "👨‍💼 ಆಡ್ಮಿನ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
         "nav_analytics": "📊 ವಿಶ್ಲೇಷಣೆ",
-        "nav_title": "ನ್ಯಾವಿಗೇಶನ್"
-    }
+        "nav_title": "ನ್ಯಾವಿಗೇಶನ್",
+    },
 }
+
 
 # ---------------- CSS LOADER ----------------
 def load_css():
@@ -74,6 +75,7 @@ def load_css():
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     except:
         st.warning("⚠️ CSS file missing")
+
 
 load_css()
 
@@ -88,24 +90,15 @@ st.sidebar.markdown("## 🤖 AI Features")
 
 ai_mode = st.sidebar.radio(
     "Choose AI Mode",
-    [
-        "None",
-        "Local AI (Ollama)",
-        "BYOK (API Key)",
-        "Google ADK Agent"
-    ],
-    key="ai_mode"
+    ["None", "Local AI (Ollama)", "BYOK (API Key)", "Google ADK Agent"],
+    key="ai_mode",
 )
 
 
 api_key = ""
 
 if ai_mode == "BYOK (API Key)":
-    api_key = st.sidebar.text_input(
-        "Enter API Key",
-        type="password",
-        key="api_key"
-    )
+    api_key = st.sidebar.text_input("Enter API Key", type="password", key="api_key")
 
 # ---------------- NAVIGATION ----------------
 page = st.sidebar.radio(
@@ -116,30 +109,35 @@ page = st.sidebar.radio(
         texts[language]["nav_track"],
         texts[language]["nav_admin"],
         texts[language]["nav_analytics"],
-        "🤖 AI Assistant"
+        "🤖 AI Assistant",
     ],
-    key="main_nav"
+    key="main_nav",
 )
 
 # ---------------- ROUTING ----------------
 if page == texts[language]["nav_home"]:
     from pages.home import show_home
+
     show_home(language)
 
 elif page == texts[language]["nav_report"]:
     from pages.report_leakage import show_report_page
+
     show_report_page(language)
 
 elif page == texts[language]["nav_track"]:
     from pages.track_reports import show_track_page
+
     show_track_page(language)
 
 elif page == texts[language]["nav_admin"]:
     from pages.admin_dashboard import show_admin_page
+
     show_admin_page(language)
 
 elif page == texts[language]["nav_analytics"]:
     from pages.analytics import show_analytics_page
+
     show_analytics_page(language)
 
 # ---------------- AI PAGE ----------------
@@ -147,4 +145,6 @@ elif page == "🤖 AI Assistant":
     if AI_AVAILABLE and ai_page:
         ai_page(language, ai_mode, api_key)
     else:
-        st.error("❌ AI module not loaded. Please check pages/ai_assistant.py and redeploy.")
+        st.error(
+            "❌ AI module not loaded. Please check pages/ai_assistant.py and redeploy."
+        )

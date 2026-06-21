@@ -11,7 +11,7 @@ def add_report(
     severity,
     image_path,
     status,
-    date_reported
+    date_reported,
 ):
     conn = get_connection()
     cursor = conn.cursor()
@@ -40,8 +40,8 @@ def add_report(
             severity,
             image_path,
             status,
-            date_reported
-        )
+            date_reported,
+        ),
     )
 
     conn.commit()
@@ -49,12 +49,7 @@ def add_report(
 
 
 def submit_report(
-    reporter_name,
-    location,
-    issue_type,
-    description,
-    severity,
-    image_path=""
+    reporter_name, location, issue_type, description, severity, image_path=""
 ):
     report_id = f"RPT-{datetime.now().strftime('%Y%m%d%H%M%S')}"
 
@@ -67,7 +62,7 @@ def submit_report(
         severity=severity,
         image_path=image_path,
         status="Pending",
-        date_reported=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        date_reported=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     )
 
     return report_id
@@ -97,10 +92,7 @@ def search_report(report_id):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute(
-        "SELECT * FROM reports WHERE report_id = ?",
-        (report_id,)
-    )
+    cursor.execute("SELECT * FROM reports WHERE report_id = ?", (report_id,))
 
     report = cursor.fetchone()
 
@@ -118,7 +110,7 @@ def update_status(report_id, status):
         SET status = ?
         WHERE report_id = ?
         """,
-        (status, report_id)
+        (status, report_id),
     )
 
     conn.commit()
@@ -132,14 +124,10 @@ def get_report_counts():
     cursor.execute("SELECT COUNT(*) FROM reports")
     total = cursor.fetchone()[0]
 
-    cursor.execute(
-        "SELECT COUNT(*) FROM reports WHERE status='Pending'"
-    )
+    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Pending'")
     pending = cursor.fetchone()[0]
 
-    cursor.execute(
-        "SELECT COUNT(*) FROM reports WHERE status='Resolved'"
-    )
+    cursor.execute("SELECT COUNT(*) FROM reports WHERE status='Resolved'")
     resolved = cursor.fetchone()[0]
 
     conn.close()

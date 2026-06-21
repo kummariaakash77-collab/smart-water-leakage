@@ -2,10 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-from utils.report_manager import (
-    get_report_counts,
-    get_all_reports
-)
+from utils.report_manager import get_report_counts, get_all_reports
+
 
 def show_analytics_page(language):
 
@@ -22,9 +20,8 @@ def show_analytics_page(language):
             "full_data": "📋 Full Reports Data",
             "status_title": "Report Status Distribution",
             "location_title": "Reports by Location",
-            "severity_title": "Severity Level Distribution"
+            "severity_title": "Severity Level Distribution",
         },
-
         "Hindi": {
             "title": "📊 एनालिटिक्स डैशबोर्ड",
             "total": "📄 कुल रिपोर्ट",
@@ -37,9 +34,8 @@ def show_analytics_page(language):
             "full_data": "📋 सभी रिपोर्ट डेटा",
             "status_title": "रिपोर्ट स्थिति वितरण",
             "location_title": "स्थान अनुसार रिपोर्ट",
-            "severity_title": "गंभीरता स्तर वितरण"
+            "severity_title": "गंभीरता स्तर वितरण",
         },
-
         "Telugu": {
             "title": "📊 విశ్లేషణల డ్యాష్‌బోర్డ్",
             "total": "📄 మొత్తం రిపోర్టులు",
@@ -52,9 +48,8 @@ def show_analytics_page(language):
             "full_data": "📋 పూర్తి రిపోర్ట్ డేటా",
             "status_title": "రిపోర్ట్ స్థితి పంపిణీ",
             "location_title": "ప్రాంతాల వారీగా రిపోర్టులు",
-            "severity_title": "తీవ్రత స్థాయి పంపిణీ"
+            "severity_title": "తీవ్రత స్థాయి పంపిణీ",
         },
-
         "Tamil": {
             "title": "📊 பகுப்பாய்வு டாஷ்போர்டு",
             "total": "📄 மொத்த அறிக்கைகள்",
@@ -67,9 +62,8 @@ def show_analytics_page(language):
             "full_data": "📋 முழு அறிக்கை தரவு",
             "status_title": "அறிக்கை நிலை விநியோகம்",
             "location_title": "இட வாரியான அறிக்கைகள்",
-            "severity_title": "தீவிர நிலை விநியோகம்"
+            "severity_title": "தீவிர நிலை விநியோகம்",
         },
-
         "Kannada": {
             "title": "📊 ವಿಶ್ಲೇಷಣಾ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
             "total": "📄 ಒಟ್ಟು ವರದಿಗಳು",
@@ -82,8 +76,8 @@ def show_analytics_page(language):
             "full_data": "📋 ಸಂಪೂರ್ಣ ವರದಿ ಡೇಟಾ",
             "status_title": "ವರದಿ ಸ್ಥಿತಿ ವಿತರಣೆ",
             "location_title": "ಸ್ಥಳವಾರು ವರದಿಗಳು",
-            "severity_title": "ತೀವ್ರತೆ ಮಟ್ಟ ವಿತರಣೆ"
-        }
+            "severity_title": "ತೀವ್ರತೆ ಮಟ್ಟ ವಿತರಣೆ",
+        },
     }
 
     t = texts.get(language, texts["English"])
@@ -103,32 +97,30 @@ def show_analytics_page(language):
         st.warning(t["no_reports"])
         return
 
-    df = pd.DataFrame(reports, columns=[
-        "ID",
-        "Report ID",
-        "Name",
-        "Location",
-        "Issue Type",
-        "Description",
-        "Severity",
-        "Image",
-        "Status",
-        "Date"
-    ])
+    df = pd.DataFrame(
+        reports,
+        columns=[
+            "ID",
+            "Report ID",
+            "Name",
+            "Location",
+            "Issue Type",
+            "Description",
+            "Severity",
+            "Image",
+            "Status",
+            "Date",
+        ],
+    )
 
     st.subheader(t["status_dist"])
 
-    pie_df = pd.DataFrame({
-        "Status": ["Pending", "Resolved"],
-        "Count": [pending, resolved]
-    })
+    pie_df = pd.DataFrame(
+        {"Status": ["Pending", "Resolved"], "Count": [pending, resolved]}
+    )
 
     fig1 = px.pie(
-        pie_df,
-        names="Status",
-        values="Count",
-        title=t["status_title"],
-        hole=0.4
+        pie_df, names="Status", values="Count", title=t["status_title"], hole=0.4
     )
 
     st.plotly_chart(fig1, width="stretch")
@@ -143,7 +135,7 @@ def show_analytics_page(language):
         x="Location",
         y="Reports",
         title=t["location_title"],
-        text="Reports"
+        text="Reports",
     )
 
     fig2.update_traces(textposition="outside")
@@ -156,11 +148,7 @@ def show_analytics_page(language):
     severity_df.columns = ["Severity", "Count"]
 
     fig3 = px.bar(
-        severity_df,
-        x="Severity",
-        y="Count",
-        title=t["severity_title"],
-        text="Count"
+        severity_df, x="Severity", y="Count", title=t["severity_title"], text="Count"
     )
 
     fig3.update_traces(textposition="outside")

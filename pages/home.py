@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.report_manager import get_report_counts
 
+
 def show_home(language):
 
     total, pending, resolved = get_report_counts()
@@ -16,7 +17,7 @@ def show_home(language):
             "resolved": "✅ Resolved Issues",
             "high": "🚨 High Priority",
             "success": "Welcome to the Smart Water Leakage Reporting Portal",
-            "info": "Use the sidebar to report leakages, track reports, manage updates, and view analytics."
+            "info": "Use the sidebar to report leakages, track reports, manage updates, and view analytics.",
         },
         "Hindi": {
             "title": "💧 स्मार्ट वाटर लीकेज रिपोर्टिंग सिस्टम",
@@ -26,7 +27,7 @@ def show_home(language):
             "resolved": "✅ समाधान किए गए मामले",
             "high": "🚨 उच्च प्राथमिकता",
             "success": "स्मार्ट वाटर लीकेज पोर्टल में आपका स्वागत है",
-            "info": "लीकेज रिपोर्ट करने, ट्रैक करने और एनालिटिक्स देखने के लिए साइडबार का उपयोग करें।"
+            "info": "लीकेज रिपोर्ट करने, ट्रैक करने और एनालिटिक्स देखने के लिए साइडबार का उपयोग करें।",
         },
         "Telugu": {
             "title": "💧 స్మార్ట్ వాటర్ లీకేజ్ రిపోర్టింగ్ సిస్టమ్",
@@ -36,7 +37,7 @@ def show_home(language):
             "resolved": "✅ పరిష్కరించినవి",
             "high": "🚨 అధిక ప్రాధాన్యత",
             "success": "స్వాగతం",
-            "info": "సైడ్‌బార్ ద్వారా రిపోర్ట్ చేయండి మరియు ట్రాక్ చేయండి."
+            "info": "సైడ్‌బార్ ద్వారా రిపోర్ట్ చేయండి మరియు ట్రాక్ చేయండి.",
         },
         "Tamil": {
             "title": "💧 ஸ்மார்ட் நீர் கசிவு அறிக்கை அமைப்பு",
@@ -46,7 +47,7 @@ def show_home(language):
             "resolved": "✅ தீர்க்கப்பட்டவை",
             "high": "🚨 உயர் முன்னுரிமை",
             "success": "வரவேற்கிறோம்",
-            "info": "சைட்பார் மூலம் புகாரளிக்கவும் மற்றும் கண்காணிக்கவும்."
+            "info": "சைட்பார் மூலம் புகாரளிக்கவும் மற்றும் கண்காணிக்கவும்.",
         },
         "Kannada": {
             "title": "💧 ಸ್ಮಾರ್ಟ್ ನೀರಿನ ಸೋರಿಕೆ ವರದಿ ವ್ಯವಸ್ಥೆ",
@@ -56,8 +57,8 @@ def show_home(language):
             "resolved": "✅ ಪರಿಹರಿಸಲಾಗಿದೆ",
             "high": "🚨 ಹೆಚ್ಚಿನ ಪ್ರಾಮುಖ್ಯತೆ",
             "success": "ಸ್ವಾಗತ",
-            "info": "ಸೈಡ್‌ಬಾರ್ ಬಳಸಿ ವರದಿ ಮಾಡಿ ಮತ್ತು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ."
-        }
+            "info": "ಸೈಡ್‌ಬಾರ್ ಬಳಸಿ ವರದಿ ಮಾಡಿ ಮತ್ತು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ.",
+        },
     }
 
     t = texts[language]
