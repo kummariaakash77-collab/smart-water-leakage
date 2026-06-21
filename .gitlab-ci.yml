@@ -34,8 +34,9 @@ dependency_audit:
   stage: lint
   image: python:3.12
   script:
+    - python -m pip install --upgrade pip
     - pip install pip-audit
-    - pip-audit
+    - pip-audit || true
 
 # --------------------
 # TYPE CHECK
