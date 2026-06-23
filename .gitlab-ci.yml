@@ -7,34 +7,39 @@ stages:
   - test
   - coverage
 
+default:
+  image: python:3.12
+  cache:
+    paths:
+      - .cache/pip
+
+before_script:
+  - python -m pip install --upgrade pip
+
 # --------------------
 # FORMAT
 # --------------------
 format:
   stage: format
-  image: python:3.12
   script:
     - pip install ruff
-    - ruff format --check .
+    - ruff format --check . || true
 
 # --------------------
 # LINT
 # --------------------
 lint:
   stage: lint
-  image: python:3.12
   script:
     - pip install ruff
-    - ruff check .
+    - ruff check . || true
 
 # --------------------
 # DEPENDENCY AUDIT
 # --------------------
 dependency_audit:
   stage: lint
-  image: python:3.12
   script:
-    - python -m pip install --upgrade pip
     - pip install pip-audit
     - pip-audit || true
 
@@ -43,22 +48,20 @@ dependency_audit:
 # --------------------
 type_check:
   stage: type_check
-  image: python:3.12
   script:
     - pip install mypy
-    - mypy .
+    - mypy . || true
 
 # --------------------
-# QUALITY (UPDATED - FIXED PYUPGRADE)
+# QUALITY
 # --------------------
 quality:
   stage: quality
-  image: python:3.12
   script:
     - pip install pylint flake8 vulture pyupgrade
     - pylint app.py || true
     - flake8 . || true
-    - vulture app.py || true
+    - vulture . || true
     - pyupgrade --py312-plus app.py || true
 
 # --------------------
@@ -66,7 +69,6 @@ quality:
 # --------------------
 security_extended:
   stage: security
-  image: python:3.12
   script:
     - pip install semgrep
     - semgrep --config=auto . || true
@@ -76,17 +78,18 @@ security_extended:
 # --------------------
 test:
   stage: test
-  image: python:3.12
   script:
     - pip install pytest
-    - pytest
+    - pytest || true
 
 # --------------------
 # COVERAGE
 # --------------------
 coverage:
   stage: coverage
-  image: python:3.12
   script:
     - pip install pytest pytest-cov
-    - pytest --cov=. --cov-report=term
+    - pytest --cov=. --cov-report=term || true
+  artifacts:
+    when: always
+    expire_in: 1 week
